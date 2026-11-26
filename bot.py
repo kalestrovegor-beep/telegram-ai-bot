@@ -4,31 +4,21 @@ from telegram.ext import (
     Application,
     CommandHandler,
     MessageHandler,
-    ContextTypes,
     filters,
+    ContextTypes,
 )
 
-TELEGRAM_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-
+TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Бот запущен.")
-
+    await update.message.reply_text("Бот работает!")
 
 async def answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Сообщение получено.")
+    await update.message.reply_text("Получил: " + update.message.text)
 
-
-application = Application.builder().token(TELEGRAM_TOKEN).build()
-application.add_handler(CommandHandler("start", start))
-application.add_handler(
-    MessageHandler(filters.TEXT & ~filters.COMMAND, answer)
-)
-
-
-def main():
-    application.run_polling()
-
+app = Application.builder().token(TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, answer))
 
 if __name__ == "__main__":
-    main()
+    app.run_polling()
